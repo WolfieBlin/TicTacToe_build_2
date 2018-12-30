@@ -1,0 +1,6 @@
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_build_2\TicTacToe_build_2\bin\Debug\TicTacToe_build_2.exe
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_build_2\TicTacToe_build_2\bin\Debug\TicTacToe_build_2.pdb
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_build_2\TicTacToe_build_2\obj\Debug\TicTacToe_build_2.csprojAssemblyReference.cache
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_build_2\TicTacToe_build_2\obj\Debug\TicTacToe_build_2.csproj.CoreCompileInputs.cache
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_build_2\TicTacToe_build_2\obj\Debug\TicTacToe_build_2.exe
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_build_2\TicTacToe_build_2\obj\Debug\TicTacToe_build_2.pdb

@@ -14,6 +14,8 @@ namespace TicTacToe_build_2
         private string pokus;
         private bool pokracovat = true;
         
+        //až se v tom budeš někdy hrabat tak nezapomeň že to jde na chuja a ani
+        //teď nevíš jak to je s tou výhrou kdy je X a kdy O tak bacha kryple
         public Game()
         {
             Start();
@@ -35,6 +37,7 @@ namespace TicTacToe_build_2
                 else
                 {
                     _board[element] = "O";
+                    //opravit na funkci void aspoň draw
                     if (Winning(_board, _playerTurn) || Draw(_board))
                     {
                         pokracovat = true;

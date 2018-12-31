@@ -126,7 +126,7 @@ namespace TicTacToe_build_2
             Console.WriteLine("  {0}  |  {1}  |  {2}", board[6], board[7], board[8]);
             Console.WriteLine("     |     |      ");
         }
-
+//
         private int HracTurn()
         {
             var choose = Convert.ToInt32(Console.ReadLine()) - 1;

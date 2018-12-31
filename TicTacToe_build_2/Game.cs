@@ -7,7 +7,7 @@ namespace TicTacToe_build_2
     public class Game
     {
         private string[] _board;
-        private int _playerTurn;
+        private string _playerTurn;
         private readonly Random _random = new Random();
         private bool _winning;
         private bool _draw;
@@ -17,19 +17,19 @@ namespace TicTacToe_build_2
             Start();
         }
 
-        private void Move(int element, int player)
+        private void Move(int element, string player)
         {
             if (_board[element] != "X" && _board[element] != "O")
             {
-                if (player == 1)
+                if (player == "X")
                 {
                     _board[element] = "X";
-                    _playerTurn = 2;
+                    _playerTurn = "O";
                 }
                 else
                 {
                     _board[element] = "O";
-                    _playerTurn = 1;
+                    _playerTurn = "X";
                 }
 
                 
@@ -54,7 +54,14 @@ namespace TicTacToe_build_2
         private void Reset()
         {
             _board = new [] {"1","2","3","4","5","6","7","8","9"};
-            _playerTurn = _random.Next(0,2);
+            if (_random.Next(0,2) == 1)
+            {
+                _playerTurn = "X";
+            }
+            else
+            {
+                _playerTurn = "O";
+            }
         }
 
         private string[] Avail()
@@ -63,18 +70,25 @@ namespace TicTacToe_build_2
             return availMoves;
         }
 
-        private bool Winning(string[] board)
+        private bool Winning(string[] board, string player)
         {
-            if ((board[0] == board[1] && board[1] == board[2]) ||
-                (board[3] == board[4] && board[5] == board[4]) ||
-                (board[6] == board[7] && board[8] == board[7]) ||
-                (board[0] == board[3] && board[6] == board[3]) ||
-                (board[1] == board[4] && board[7] == board[4]) ||
-                (board[2] == board[5] && board[8] == board[5]) ||
-                (board[0] == board[4] && board[8] == board[4]) ||
-                (board[2] == board[4] && board[6] == board[4]))
+            if ((board[0] == player && board[1] == player && board[2] == player) ||
+                (board[3] == player && board[4] == player && board[5] == player) ||
+                (board[6] == player && board[7] == player && board[8] == player) ||
+                (board[0] == player && board[3] == player && board[6] == player) ||
+                (board[1] == player && board[4] == player && board[7] == player) ||
+                (board[2] == player && board[5] == player && board[8] == player) ||
+                (board[0] == player && board[4] == player && board[8] == player) ||
+                (board[2] == player && board[4] == player && board[6] == player))
             {
-                _playerTurn = _playerTurn - 1;
+                /*if (_playerTurn == "X")
+                {
+                    _playerTurn = "O";
+                }
+                else
+                {
+                    _playerTurn = "X";
+                }*/
                 _winning = true;
                 return true;
             }
@@ -121,9 +135,9 @@ namespace TicTacToe_build_2
                 Reset();
                 Print(_board);
                 
-                while (!Winning(_board) && !Draw(_board))
+                while (!Winning(_board, _playerTurn) && !Draw(_board))
                 {
-                    if (_playerTurn == 1)
+                    if (_playerTurn == "X")
                     {
                         Move(HracTurn(), _playerTurn);
                     }
@@ -135,7 +149,7 @@ namespace TicTacToe_build_2
 
                 if (_winning)
                 {
-                    if (_playerTurn == 1)
+                    if (_playerTurn == "X")
                     {
                         Console.WriteLine("Vyhrál: X");
                     }
@@ -159,6 +173,11 @@ namespace TicTacToe_build_2
 
                 break;
             }
+        }
+
+        public void MinMax()
+        {
+            
         }
     }
 }

@@ -11,6 +11,8 @@ namespace TicTacToe_build_2
         private readonly Random _random = new Random();
         private bool _winning;
         private bool _draw;
+        private string pokus;
+        private bool pokracovat = true;
         
         public Game()
         {
@@ -24,11 +26,19 @@ namespace TicTacToe_build_2
                 if (player == "X")
                 {
                     _board[element] = "X";
+                    if (Winning(_board, _playerTurn)|| Draw(_board))
+                    {
+                        pokracovat = true;
+                    }
                     _playerTurn = "O";
                 }
                 else
                 {
                     _board[element] = "O";
+                    if (Winning(_board, _playerTurn) || Draw(_board))
+                    {
+                        pokracovat = true;
+                    }
                     _playerTurn = "X";
                 }
 
@@ -72,6 +82,14 @@ namespace TicTacToe_build_2
 
         private bool Winning(string[] board, string player)
         {
+            /*if (player == "X")
+            {
+                this.pokus = "O";
+            }
+            else
+            {
+                this.pokus = "X";
+            }*/
             if ((board[0] == player && board[1] == player && board[2] == player) ||
                 (board[3] == player && board[4] == player && board[5] == player) ||
                 (board[6] == player && board[7] == player && board[8] == player) ||
@@ -81,14 +99,7 @@ namespace TicTacToe_build_2
                 (board[0] == player && board[4] == player && board[8] == player) ||
                 (board[2] == player && board[4] == player && board[6] == player))
             {
-                /*if (_playerTurn == "X")
-                {
-                    _playerTurn = "O";
-                }
-                else
-                {
-                    _playerTurn = "X";
-                }*/
+                
                 _winning = true;
                 return true;
             }
@@ -135,7 +146,7 @@ namespace TicTacToe_build_2
                 Reset();
                 Print(_board);
                 
-                while (!Winning(_board, _playerTurn) && !Draw(_board))
+                while (!_draw && !_winning)
                 {
                     if (_playerTurn == "X")
                     {
@@ -149,7 +160,7 @@ namespace TicTacToe_build_2
 
                 if (_winning)
                 {
-                    if (_playerTurn == "X")
+                    if (_playerTurn == "O")
                     {
                         Console.WriteLine("Vyhrál: X");
                     }
@@ -165,19 +176,11 @@ namespace TicTacToe_build_2
 
 
                 Console.WriteLine("Chcete hrát znovu? y/n");
-                if (Console.ReadLine() == "y")
+                if (Console.ReadLine() != "y")
                 {
-                    Reset();
-                    continue;
+                    break;
                 }
-
-                break;
             }
-        }
-
-        public void MinMax()
-        {
-            
         }
     }
 }

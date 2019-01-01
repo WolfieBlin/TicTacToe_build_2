@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace TicTacToe_build_2
@@ -24,69 +25,6 @@ namespace TicTacToe_build_2
             Start();
         }
 
-        public int Minimax(string[] reboard, bool player) {
-           // iter++;
-           //var score = new List<int>();
-            var array = Avail(reboard);
-            if (Winning(reboard, true)) {
-                //score.Add(-10);
-                return -10;
-            } else if (Winning(reboard, false)) {
-              // score.Add(10);
-              return 10;
-            } else if (array.Length == 0) {
-               // score.Add(0);
-               return 0;
-            }
-
-            var moves = new List<int>();
-            var movesscore = new List<int>();
-            for (var i = 0; i < array.Length; i++)
-            {
-                int movescore;
-                //var movescore = new List<int>();
-                var move = Convert.ToInt32(array[i]);
-                if (player)
-                {
-                    reboard[Convert.ToInt32(array[i]) - 1] = "X";
-                }
-                else
-                {
-                    reboard[Convert.ToInt32(array[i]) - 1] = "O";
-                }
-
-                if (!player) {
-                    var g = Minimax(reboard, true);
-                    movescore = g;
-                } else {
-                    var g = Minimax(reboard, false);
-                    movescore = g;
-                }
-                reboard[Convert.ToInt32(array[i]) - 1] = move.ToString();
-                moves.Add(move);
-                movesscore.Add(movescore);
-            }
-
-            int bestMove = 0;
-            if (player == false) {
-                var bestScore = -10000;
-                for (var i = 0; i < moves.Count; i++) {
-                    if (movesscore[i] > bestScore) {
-                        bestScore = movesscore[i];
-                        bestMove = i;
-                    }
-                }
-            } else {
-                var bestScore = 10000;
-                for (var i = 0; i < moves.Count; i++) {
-                    if (movesscore[i] < bestScore) {
-                        bestScore = movesscore[i];
-                        bestMove = i;
-                    }
-                }
-            }
-            return moves[bestMove];
-        }
         
         private void Move(int element, bool player)
         {
@@ -114,9 +52,9 @@ namespace TicTacToe_build_2
 
         private void Draw(string[] board)
         {
-            if (board[0] != "1" && board[1] != "2" && board[2] != "3" && board[3]
-                != "4" && board[4] != "5" && board[5] != "6" && board[6] != "7"
-                && board[7] != "8" && board[8] != "9")
+            if (board[0] != "0" && board[1] != "1" && board[2] != "2" && board[3]
+                != "3" && board[4] != "4" && board[5] != "5" && board[6] != "6"
+                && board[7] != "7" && board[8] != "8")
             {
                 _draw = true;
             }
@@ -124,7 +62,7 @@ namespace TicTacToe_build_2
         }
         private void Reset()
         {
-            _board = new [] {"1","2","3","4","5","6","7","8","9"};
+            _board = new [] {"0","1","2","3","4","5","6","7","8"};
             _winning = false;
             _draw = false;
             
@@ -182,6 +120,43 @@ namespace TicTacToe_build_2
                 return false;
             }
         }
+        public bool WinningMinMax(string[] board, bool player)
+        {
+            string playerXO;
+            /*if (player == "X")
+            {
+                this.pokus = "O";
+            }
+            else
+            {
+                this.pokus = "X";
+            }*/
+            if (player)
+            {
+                playerXO = "X";
+            }
+            else
+            {
+                playerXO = "O";
+            }
+            
+            if ((board[0] == playerXO && board[1] == playerXO && board[2] == playerXO) ||
+                (board[3] == playerXO && board[4] == playerXO && board[5] == playerXO) ||
+                (board[6] == playerXO && board[7] == playerXO && board[8] == playerXO) ||
+                (board[0] == playerXO && board[3] == playerXO && board[6] == playerXO) ||
+                (board[1] == playerXO && board[4] == playerXO && board[7] == playerXO) ||
+                (board[2] == playerXO && board[5] == playerXO && board[8] == playerXO) ||
+                (board[0] == playerXO && board[4] == playerXO && board[8] == playerXO) ||
+                (board[2] == playerXO && board[4] == playerXO && board[6] == playerXO))
+            {
+                
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         private void Print(string[] board)
         {
@@ -191,7 +166,7 @@ namespace TicTacToe_build_2
             Console.WriteLine("Hrajete za křížek: X a potítač za kolečko: O");
             
             Console.WriteLine("     |     |      ");
-            Console.WriteLine("  {0}  |  {1}  |  {2}", board[0], board[1], board[2]);
+            Console.WriteLine("  {0}  |  {1}  |  {2}", board[0] , board[1], board[2]);
             Console.WriteLine("_____|_____|_____ ");
             Console.WriteLine("     |     |      ");
             Console.WriteLine("  {0}  |  {1}  |  {2}", board[3], board[4], board[5]);
@@ -203,14 +178,15 @@ namespace TicTacToe_build_2
 //
         private int HracTurn()
         {
-            var choose = Convert.ToInt32(Console.ReadLine()) - 1;
+            var choose = Convert.ToInt32(Console.ReadLine());
             return choose;
         }
 
         private int AiTurn()
         {
             var choose = _random.Next(0, Avail(_board).Length);
-            return Convert.ToInt32(Avail(_board)[choose]) - 1;
+            return Convert.ToInt32(Avail(_board)[choose]);
+            //return Minimax(_board, false);
         }
 
         private void Start()

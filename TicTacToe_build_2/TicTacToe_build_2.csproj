@@ -38,9 +38,8 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AlphaBeta.cs" />
         <Compile Include="Game.cs" />
-        <Compile Include="Node.cs" />
+        <Compile Include="MinMax.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

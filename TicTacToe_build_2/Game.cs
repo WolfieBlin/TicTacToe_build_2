@@ -6,13 +6,12 @@ namespace TicTacToe_build_2
 {
     public class Game
     {
-        private string[] _board;
+        public string[] _board;
         private string _playerTurn;
         private readonly Random _random = new Random();
         private bool _winning;
         private bool _draw;
-        private string pokus;
-        private bool pokracovat = true;
+        private bool _continue = true;
         
         //až se v tom budeš někdy hrabat tak nezapomeň že to jde na chuja a ani
         //teď nevíš jak to je s tou výhrou kdy je X a kdy O tak bacha kryple
@@ -28,20 +27,16 @@ namespace TicTacToe_build_2
                 if (player == "X")
                 {
                     _board[element] = "X";
-                    if (Winning(_board, _playerTurn)|| Draw(_board))
-                    {
-                        pokracovat = true;
-                    }
+                    Winning(_board, _playerTurn);
+                    Draw(_board);
                     _playerTurn = "O";
                 }
                 else
                 {
                     _board[element] = "O";
                     //opravit na funkci void aspoň draw
-                    if (Winning(_board, _playerTurn) || Draw(_board))
-                    {
-                        pokracovat = true;
-                    }
+                    Winning(_board, _playerTurn);
+                    Draw(_board);
                     _playerTurn = "X";
                 }
 
@@ -50,23 +45,22 @@ namespace TicTacToe_build_2
             }
         }
 
-        private bool Draw(string[] board)
+        private void Draw(string[] board)
         {
             if (board[0] != "1" && board[1] != "2" && board[2] != "3" && board[3]
                 != "4" && board[4] != "5" && board[5] != "6" && board[6] != "7"
                 && board[7] != "8" && board[8] != "9")
             {
                 _draw = true;
-                return true;
             }
-            else
-            {
-                return false;
-            }
+          
         }
         private void Reset()
         {
             _board = new [] {"1","2","3","4","5","6","7","8","9"};
+            _winning = false;
+            _draw = false;
+            
             if (_random.Next(0,2) == 1)
             {
                 _playerTurn = "X";
@@ -77,13 +71,13 @@ namespace TicTacToe_build_2
             }
         }
 
-        private string[] Avail()
+        public string[] Avail()
         {
             var availMoves = _board.Where(s => s !="X" && s != "O").ToArray();
             return availMoves;
         }
 
-        private bool Winning(string[] board, string player)
+        public bool Winning(string[] board, string player)
         {
             /*if (player == "X")
             {
@@ -144,7 +138,7 @@ namespace TicTacToe_build_2
 
         private void Start()
         {
-            while (true)
+            while (_continue)
             {
                 Reset();
                 Print(_board);
@@ -181,7 +175,7 @@ namespace TicTacToe_build_2
                 Console.WriteLine("Chcete hrát znovu? y/n");
                 if (Console.ReadLine() != "y")
                 {
-                    break;
+                    _continue = false;
                 }
             }
         }

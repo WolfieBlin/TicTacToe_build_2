@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -7,11 +8,14 @@ namespace TicTacToe_build_2
     public class Game
     {
         public string[] _board;
-        private string _playerTurn;
+        public bool _playerTurn;
         private readonly Random _random = new Random();
         private bool _winning;
         private bool _draw;
         private bool _continue = true;
+        public string[] _reboard;
+        /*public string pcPlayer = "X";
+        public string aiPlayer = "X";*/
         
         //až se v tom budeš někdy hrabat tak nezapomeň že to jde na chuja a ani
         //teď nevíš jak to je s tou výhrou kdy je X a kdy O tak bacha kryple
@@ -20,24 +24,87 @@ namespace TicTacToe_build_2
             Start();
         }
 
-        private void Move(int element, string player)
+        public int Minimax(string[] reboard, bool player) {
+           // iter++;
+           //var score = new List<int>();
+            var array = Avail(reboard);
+            if (Winning(reboard, true)) {
+                //score.Add(-10);
+                return -10;
+            } else if (Winning(reboard, false)) {
+              // score.Add(10);
+              return 10;
+            } else if (array.Length == 0) {
+               // score.Add(0);
+               return 0;
+            }
+
+            var moves = new List<int>();
+            var movesscore = new List<int>();
+            for (var i = 0; i < array.Length; i++)
+            {
+                int movescore;
+                //var movescore = new List<int>();
+                var move = Convert.ToInt32(array[i]);
+                if (player)
+                {
+                    reboard[Convert.ToInt32(array[i]) - 1] = "X";
+                }
+                else
+                {
+                    reboard[Convert.ToInt32(array[i]) - 1] = "O";
+                }
+
+                if (!player) {
+                    var g = Minimax(reboard, true);
+                    movescore = g;
+                } else {
+                    var g = Minimax(reboard, false);
+                    movescore = g;
+                }
+                reboard[Convert.ToInt32(array[i]) - 1] = move.ToString();
+                moves.Add(move);
+                movesscore.Add(movescore);
+            }
+
+            int bestMove = 0;
+            if (player == false) {
+                var bestScore = -10000;
+                for (var i = 0; i < moves.Count; i++) {
+                    if (movesscore[i] > bestScore) {
+                        bestScore = movesscore[i];
+                        bestMove = i;
+                    }
+                }
+            } else {
+                var bestScore = 10000;
+                for (var i = 0; i < moves.Count; i++) {
+                    if (movesscore[i] < bestScore) {
+                        bestScore = movesscore[i];
+                        bestMove = i;
+                    }
+                }
+            }
+            return moves[bestMove];
+        }
+        
+        private void Move(int element, bool player)
         {
             if (_board[element] != "X" && _board[element] != "O")
             {
-                if (player == "X")
+                if (player)
                 {
                     _board[element] = "X";
                     Winning(_board, _playerTurn);
                     Draw(_board);
-                    _playerTurn = "O";
+                    _playerTurn = false;
                 }
                 else
                 {
                     _board[element] = "O";
-                    //opravit na funkci void aspoň draw
                     Winning(_board, _playerTurn);
                     Draw(_board);
-                    _playerTurn = "X";
+                    _playerTurn = true;
                 }
 
                 
@@ -63,22 +130,23 @@ namespace TicTacToe_build_2
             
             if (_random.Next(0,2) == 1)
             {
-                _playerTurn = "X";
+                _playerTurn = true;
             }
             else
             {
-                _playerTurn = "O";
+                _playerTurn = false;
             }
         }
 
-        public string[] Avail()
+        public string[] Avail(string[] reboard)
         {
-            var availMoves = _board.Where(s => s !="X" && s != "O").ToArray();
+            var availMoves = reboard.Where(s => s !="X" && s != "O").ToArray();
             return availMoves;
         }
 
-        public bool Winning(string[] board, string player)
+        public bool Winning(string[] board, bool player)
         {
+            string playerXO;
             /*if (player == "X")
             {
                 this.pokus = "O";
@@ -87,14 +155,23 @@ namespace TicTacToe_build_2
             {
                 this.pokus = "X";
             }*/
-            if ((board[0] == player && board[1] == player && board[2] == player) ||
-                (board[3] == player && board[4] == player && board[5] == player) ||
-                (board[6] == player && board[7] == player && board[8] == player) ||
-                (board[0] == player && board[3] == player && board[6] == player) ||
-                (board[1] == player && board[4] == player && board[7] == player) ||
-                (board[2] == player && board[5] == player && board[8] == player) ||
-                (board[0] == player && board[4] == player && board[8] == player) ||
-                (board[2] == player && board[4] == player && board[6] == player))
+            if (player)
+            {
+                playerXO = "X";
+            }
+            else
+            {
+                playerXO = "O";
+            }
+            
+            if ((board[0] == playerXO && board[1] == playerXO && board[2] == playerXO) ||
+                (board[3] == playerXO && board[4] == playerXO && board[5] == playerXO) ||
+                (board[6] == playerXO && board[7] == playerXO && board[8] == playerXO) ||
+                (board[0] == playerXO && board[3] == playerXO && board[6] == playerXO) ||
+                (board[1] == playerXO && board[4] == playerXO && board[7] == playerXO) ||
+                (board[2] == playerXO && board[5] == playerXO && board[8] == playerXO) ||
+                (board[0] == playerXO && board[4] == playerXO && board[8] == playerXO) ||
+                (board[2] == playerXO && board[4] == playerXO && board[6] == playerXO))
             {
                 
                 _winning = true;
@@ -132,8 +209,8 @@ namespace TicTacToe_build_2
 
         private int AiTurn()
         {
-            var choose = _random.Next(0, Avail().Length);
-            return Convert.ToInt32(Avail()[choose]) - 1;
+            var choose = _random.Next(0, Avail(_board).Length);
+            return Convert.ToInt32(Avail(_board)[choose]) - 1;
         }
 
         private void Start()
@@ -145,7 +222,7 @@ namespace TicTacToe_build_2
                 
                 while (!_draw && !_winning)
                 {
-                    if (_playerTurn == "X")
+                    if (_playerTurn)
                     {
                         Move(HracTurn(), _playerTurn);
                     }
@@ -157,7 +234,7 @@ namespace TicTacToe_build_2
 
                 if (_winning)
                 {
-                    if (_playerTurn == "O")
+                    if (!_playerTurn)
                     {
                         Console.WriteLine("Vyhrál: X");
                     }

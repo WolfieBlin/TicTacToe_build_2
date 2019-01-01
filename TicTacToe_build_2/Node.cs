@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TicTacToe_build_2
 {
     public class Node : Game
     {
+        
         public Node()
         {
         }
@@ -11,7 +14,6 @@ namespace TicTacToe_build_2
         public List<Node> Children(bool Player)
         {
             List<Node> children = new List<Node>();
- 
             // Create your subtree here and return the results
  
             return children;
@@ -24,10 +26,7 @@ namespace TicTacToe_build_2
             // Game over?
  
            // return terminalNode;
-           if (Player)
-           {
-               
-           }
+           return Winning(_reboard,Player);
 
            return true;
         }

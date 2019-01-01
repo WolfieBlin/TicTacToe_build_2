@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace TicTacToe_build_2
 {
-    public class Game
+    public class Game 
     {
         public string[] _board;
         public bool _playerTurn;

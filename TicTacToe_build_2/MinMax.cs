@@ -5,6 +5,29 @@ namespace TicTacToe_build_2
 {
     public class MinMax : Game
     {
+
+        int Bestmove(bool player, List<int> moves, List<int> movesscore)
+        {
+            int bestMove = 0;
+            if (player == false) {
+                var bestScore = -10000;
+                for (var i = 0; i < moves.Count; i++) {
+                    if (movesscore[i] > bestScore) {
+                        bestScore = movesscore[i];
+                        bestMove = i;
+                    }
+                }
+            } else {
+                var bestScore = 10000;
+                for (var i = 0; i < moves.Count; i++) {
+                    if (movesscore[i] < bestScore) {
+                        bestScore = movesscore[i];
+                        bestMove = i;
+                    }
+                }
+            }
+            return moves[bestMove];
+        }
         public int Minimax(string[] reboard, bool player) {
            // iter++;
            //var score = new List<int>();
@@ -30,11 +53,11 @@ namespace TicTacToe_build_2
                 
                 if (player)
                 {
-                    reboard[Convert.ToInt32(array[i]) - 1] = "X";
+                    reboard[Convert.ToInt32(array[i])] = "X";
                 }
                 else
                 {
-                    reboard[Convert.ToInt32(array[i]) - 1] = "O";
+                    reboard[Convert.ToInt32(array[i])] = "O";
                 }
 
                 if (!player) {
@@ -44,30 +67,12 @@ namespace TicTacToe_build_2
                     var g = Minimax(reboard, false);
                     movescore = g;
                 }
-                reboard[Convert.ToInt32(array[i]) - 1] = move.ToString();
+                reboard[Convert.ToInt32(array[i])] = move.ToString();
                 moves.Add(move);
                 movesscore.Add(movescore);
             }
 
-            int bestMove = 0;
-            if (player == false) {
-                var bestScore = -10000;
-                for (var i = 0; i < moves.Count; i++) {
-                    if (movesscore[i] > bestScore) {
-                        bestScore = movesscore[i];
-                        bestMove = i;
-                    }
-                }
-            } else {
-                var bestScore = 10000;
-                for (var i = 0; i < moves.Count; i++) {
-                    if (movesscore[i] < bestScore) {
-                        bestScore = movesscore[i];
-                        bestMove = i;
-                    }
-                }
-            }
-            return moves[bestMove];
+            return 0;
         }
     }
 }

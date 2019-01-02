@@ -14,7 +14,8 @@ namespace TicTacToe_build_2
         private bool _winning;
         private bool _draw;
         private bool _continue = true;
-        public string[] _reboard;
+        List<MoveS> pokus = new List<MoveS>();
+        
         /*public string pcPlayer = "X";
         public string aiPlayer = "X";*/
         
@@ -25,6 +26,90 @@ namespace TicTacToe_build_2
             Start();
         }
 
+        
+        public struct MoveS
+        {
+            public int index;
+            public int score;
+            public MoveS(int Index, int Score)
+            {
+                index = Index;
+                score = Score;
+            }
+        }
+        public int Minimax(string[] reboard, bool player) {
+           // iter++;
+           //var score = new List<int>();
+            var array = Avail(reboard);
+            if (WinningMinMax(reboard, true)) {
+                //score.Add(-10);
+                return -10;
+            } else if (WinningMinMax(reboard, false)) {
+              // score.Add(10);
+              return 10;
+            } else if (array.Length == 0) {
+               // score.Add(0);
+               return 0;
+            }
+
+            List<MoveS> moves = new List<MoveS>();
+          //  List<int> movesscore = new List<int>();
+            
+            for (var i = 0; i < array.Length; i++)
+            {
+                var move = new MoveS();
+                move.index = Convert.ToInt32(array[i]);
+                /*int movescore;
+                int move = Convert.ToInt32(array[i]);*/
+                //var movescore = new List<int>();
+                
+                
+                if (player)
+                {
+                    reboard[Convert.ToInt32(array[i])] = "X";
+                }
+                else
+                {
+                    reboard[Convert.ToInt32(array[i])] = "O";
+                }
+
+                if (!player) {
+                    var g = new MoveS();
+                     g.score = Minimax(reboard, true);
+                     move.score = g.score;
+                } else {
+                    var g = new MoveS();
+                    g.score = Minimax(reboard, false);
+                    move.score = g.score;
+                }
+
+                reboard[Convert.ToInt32(array[i])] = move.index.ToString();
+                moves.Add(move);
+                pokus.Add(move);
+             //   movesscore.Add(movescore);
+            }
+
+
+            int bestMove = 0;
+            if (player == false) {
+                var bestScore = -10000;
+                for (var i = 0; i < moves.Count; i++) {
+                    if (moves[i].score > bestScore) {
+                        bestScore = moves[i].score;
+                        bestMove = i;
+                    }
+                }
+            } else {
+                var bestScore = 10000;
+                for (var i = 0; i < moves.Count; i++) {
+                    if (moves[i].score < bestScore) {
+                        bestScore = moves[i].score;
+                        bestMove = i;
+                    }
+                }
+            }
+            return moves[bestMove].index;
+        }
         
         private void Move(int element, bool player)
         {
@@ -186,7 +271,9 @@ namespace TicTacToe_build_2
         {
             var choose = _random.Next(0, Avail(_board).Length);
             return Convert.ToInt32(Avail(_board)[choose]);
-            //return Minimax(_board, false);
+            /*var index = Minimax(_board, false);
+            return index;*/
+
         }
 
         private void Start()
